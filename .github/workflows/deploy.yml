@@ -1,0 +1,25 @@
+name: Deploy Extension
+
+on:
+  push:
+    branches: [ 'main' ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+    - name: Build extension
+      run: npm run build
+    - name: Deploy to Chrome Web Store
+      uses: mnao305/chrome-extension-upload@v4.0.1
+      with:
+        file-path: dist/plex-skipper.zip
+        extension-id: hogefuga(extension id)
+        client-id: ${{ secrets.CLIENT_ID }}
+        client-secret: ${{ secrets.CLIENT_SECRET }}
+        refresh-token: ${{ secrets.REFRESH_TOKEN }}
