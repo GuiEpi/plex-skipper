@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ '*' ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Run Tests
+        run: npm test
+
+  check_version:
+    needs: tests
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      version_changed: ${{ steps.check_version.outputs.version_changed }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Check for version change
+        id: check_version
+        env:
+          before: ${{ github.event.before }}
+        run: |
+          if git diff --name-only "$before"..HEAD | grep -q '^src/manifest\.json$'; then
+              VERSION_CHANGED=1
+          else
+              VERSION_CHANGED=0
+          fi
+          echo "version_changed=$VERSION_CHANGED" >> "$GITHUB_OUTPUT"
+      - name: Get version
+        if: ${{ needs.check_version.outputs.version_changed == '1' }}
+        id: get_version
+        run: |
+          VERSION=$(jq -r .version src/manifest.json)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: check_version
+    if: ${{ needs.check_version.outputs.version_changed == '1' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Zip extension
+        run: |
+          zip extension.zip dist/skipper.js dist/manifest.json dist/icon.js
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        with:
+          tag_name: "v${{ needs.check_version.outputs.version }}"
+          name: "v${{ needs.check_version.outputs.version }}"
+          draft: false
+          prerelease: false
+          files: extension.zip
+    
+  # deploy:
+  #   needs: build
+  #   if: ${{ needs.check_version.outputs.version_changed == '1' }}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       command:
+  #         - Firefox
+  #         - Chrome
+  #   environment: ${{ matrix.command }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/download-artifact@v3
+  #     - name: Submit to Mozilla
+  #       if: matrix.command == 'Firefox'
+  #       working-directory: artifact
+  #       run: npx web-ext-submit@7
+  #       env:
+  #         WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+  #         WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+  #     - name: Submit to Google
+  #       if: matrix.command == 'Chrome'
+  #       working-directory: artifact
+  #       run: npx chrome-webstore-upload-cli@2 upload --auto-publish
+  #       env:
+  #         EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+  #         CLIENT_ID: ${{ secrets.CLIENT_ID }}
+  #         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+  #         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
