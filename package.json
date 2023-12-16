@@ -1,18 +1,14 @@
 {
-  "name": "plex-skipper",
-  "version": "1.0.1",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "build": "mkdir -p dist && zip -r dist/plex-skipper.zip icon.png manifest.json skipper.js",
+    "build": "parcel build src/manifest.json --no-cache --no-source-maps",
     "test": "jest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
+    "@parcel/config-webextension": "^2.10.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "jsdom": "^23.0.1"
+    "jsdom": "^23.0.1",
+    "parcel": "^2.10.3"
   }
 }
