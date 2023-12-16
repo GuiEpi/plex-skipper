@@ -6,7 +6,7 @@
     "permissions": ["activeTab"],
     "content_scripts": [
       {
-        "matches": ["*://*.plex.tv/watch/*"],
+        "matches": ["*://*.plex.tv/*"],
         "js": ["skipper.js"]
       }
     ],

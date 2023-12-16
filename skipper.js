@@ -24,7 +24,7 @@ function startMutationObserver() {
 }
 
 function isVideoPage(url) {
-    const videoPagePattern = /https:\/\/www\.plex\.tv\/watch\/.+/;
+    const videoPagePattern = /https:\/\/app\.plex\.tv\/.+/;
     return videoPagePattern.test(url);
 }
 
