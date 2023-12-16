@@ -1,8 +1,8 @@
-const { isVideoPage } = require('../skipper');
+const { isVideoPage } = require('../src/skipper');
 
 describe('isVideoPage', () => {
     test('identifies video page URL correctly', () => {
-        expect(isVideoPage('https://www.plex.tv/watch/some-video')).toBe(true);
-        expect(isVideoPage('https://www.plex.tv/not-watch/some-video')).toBe(false);
+        expect(isVideoPage('https://app.plex.tv/some-video')).toBe(true);
+        expect(isVideoPage('https://www.plex.tv/some-video')).toBe(false);
     });
 });

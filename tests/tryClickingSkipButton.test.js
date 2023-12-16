@@ -1,4 +1,4 @@
-const { tryClickingSkipButton } = require('../skipper');
+const { tryClickingSkipButton } = require('../src/skipper');
 
 describe('tryClickingSkipButton', () => {
     test('clicks buttons with opacity 1', () => {

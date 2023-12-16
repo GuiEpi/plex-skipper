@@ -1,4 +1,4 @@
-const { startMutationObserver } = require('../skipper');
+const { startMutationObserver } = require('../src/skipper');
 
 describe('startMutationObserver', () => {
     test('starts observing document', () => {
