@@ -1,4 +1,4 @@
-const { isVideoPage } = require('.../src/skipper');
+const { isVideoPage } = require('../src/skipper');
 
 describe('isVideoPage', () => {
     test('identifies video page URL correctly', () => {
