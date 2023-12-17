@@ -1,9 +1,8 @@
 {
     "manifest_version": 3,
     "name": "Plex Skipper",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Automatically clicks the 'Skip Intro' and 'Skip Credits' buttons on Plex.",
-    "permissions": ["activeTab"],
     "content_scripts": [
       {
         "matches": ["*://*.plex.tv/*"],
