@@ -44,7 +44,7 @@ jobs:
           fi
           echo "version_changed=$VERSION_CHANGED" >> "$GITHUB_OUTPUT"
       - name: Get version
-        if: ${{ needs.check_version.outputs.version_changed == '1' }}
+        if: ${{ steps.check_version.outputs.version_changed == '1' }}
         id: get_version
         run: |
           VERSION=$(jq -r .version src/manifest.json)
