@@ -2,7 +2,7 @@
 
 # Plex Skipper
 ![Version](https://img.shields.io/github/v/tag/GuiEpi/plex-skipper?sort=semver&label=version)
-![CI](https://github.com/GuiEpi/test-plex-skipper/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/GuiEpi/plex-skipper/actions/workflows/ci.yml/badge.svg)
 
 Plex Skipper is a Chrome extension designed to enhance your viewing experience on Plex. It automatically clicks the "Skip Intro" and "Skip Credits" buttons, allowing you to seamlessly watch your favorite shows and movies without interruptions.
 
