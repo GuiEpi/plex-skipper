@@ -67,7 +67,7 @@ jobs:
         run: npm run build
       - name: Zip extension
         run: |
-          zip extension.zip dist/skipper.js dist/manifest.json dist/icon.js
+          zip plex-skipper.zip dist/skipper.js dist/manifest.json dist/icons/*
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
@@ -78,7 +78,7 @@ jobs:
           name: "v${{ needs.check_version.outputs.version }}"
           draft: false
           prerelease: false
-          files: extension.zip
+          files: plex-skipper.zip
     
   # deploy:
   #   needs: build
