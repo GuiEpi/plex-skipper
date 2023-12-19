@@ -1,4 +1,4 @@
-<img src='./src/icon.png' width='100'>
+<img src='./src/icons/icon256.png' width='100'>
 
 # Plex Skipper
 ![Version](https://img.shields.io/github/v/tag/GuiEpi/plex-skipper?sort=semver&label=version)
