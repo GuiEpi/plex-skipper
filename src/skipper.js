@@ -1,43 +1,46 @@
-function tryClickingSkipButton() {
-    const skipButtons = document.querySelectorAll('.AudioVideoFullPlayer-overlayButton-D2xSex');
-    skipButtons.forEach(button => {
-        if (window.getComputedStyle(button).opacity === '1') {
-            button.click();
-        }
-    });
+async function tryClickingSkipButton() {
+  const skipButtons = document.querySelector('[class*=AudioVideoFullPlayer-overlayButton]');
+  if (skipButtons && window.getComputedStyle(skipButtons).opacity === '1') {
+    skipButtons.click();
+  }
+}
+
+async function tryClickingNextButton() {
+  const checkBox = document.getElementById('autoPlayCheck');
+  if (checkBox && checkBox.checked) {
+    const nextButton = document.querySelector('[class*=AudioVideoUpNext-playButton]');
+    if (nextButton) {
+      nextButton.focus();
+      nextButton.click();
+    }
+  }
 }
 
 function startMutationObserver() {
-    const observer = new MutationObserver((mutations, obs) => {
-        for (let mutation of mutations) {
-            if (mutation.addedNodes.length) {
-                tryClickingSkipButton();
-                break;
-            }
-        }
-    });
+  const observer = new MutationObserver((mutations, obs) => {
+    for (let mutation of mutations) {
+      if (mutation.addedNodes.length) {
+        tryClickingSkipButton();
+        tryClickingNextButton();
+        break;
+      }
+    }
+  });
 
-    observer.observe(document.documentElement, {
-        childList: true,
-        subtree: true
-    });
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
 }
 
-function isVideoPage(url) {
-    const videoPagePattern = /https:\/\/app\.plex\.tv\/.+/;
-    return videoPagePattern.test(url);
-}
-
-if (isVideoPage(window.location.href)) {
-    startMutationObserver();
-}
+startMutationObserver();
 
 window.addEventListener('beforeunload', () => {
-    observer.disconnect();
+  observer.disconnect();
 });
 
 module.exports = {
-    tryClickingSkipButton,
-    startMutationObserver,
-    isVideoPage
+  tryClickingSkipButton,
+  tryClickingNextButton,
+  startMutationObserver
 };
