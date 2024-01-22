@@ -80,32 +80,24 @@ jobs:
           prerelease: false
           files: plex-skipper.zip
     
-  # deploy:
-  #   needs: build
-  #   if: ${{ needs.check_version.outputs.version_changed == '1' }}
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       command:
-  #         - Firefox
-  #         - Chrome
-  #   environment: ${{ matrix.command }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/download-artifact@v3
-  #     - name: Submit to Mozilla
-  #       if: matrix.command == 'Firefox'
-  #       working-directory: artifact
-  #       run: npx web-ext-submit@7
-  #       env:
-  #         WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
-  #         WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
-  #     - name: Submit to Google
-  #       if: matrix.command == 'Chrome'
-  #       working-directory: artifact
-  #       run: npx chrome-webstore-upload-cli@2 upload --auto-publish
-  #       env:
-  #         EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
-  #         CLIENT_ID: ${{ secrets.CLIENT_ID }}
-  #         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-  #         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+  deploy:
+    needs: build
+    if: ${{ needs.check_version.outputs.version_changed == '1' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        command:
+          - Chrome
+    environment: ${{ matrix.command }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+      - name: Submit to Google
+        if: matrix.command == 'Chrome'
+        working-directory: artifact
+        run: npx chrome-webstore-upload-cli@2 upload --auto-publish
+        env:
+          EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
