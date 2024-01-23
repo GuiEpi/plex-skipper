@@ -1,3 +1,8 @@
+env:
+  DIRECTORY: dist
+  PROJECT_NAME: plex-skipper
+
+
 name: CI
 
 on:
@@ -67,7 +72,11 @@ jobs:
         run: npm run build
       - name: Zip extension
         run: |
-          zip plex-skipper.zip dist/skipper.js dist/manifest.json dist/icons/*
+          zip ${{ env.PROJECT_NAME }}.zip ${{ env.DIRECTORY }}/skipper.js ${{ env.DIRECTORY }}/manifest.json ${{ env.DIRECTORY }}/icons/*
+      - name: Upload extension artefact
+        uses: actions/upload-artifact@v3
+        with:
+          path: ${{ env.DIRECTORY }}
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
@@ -78,7 +87,7 @@ jobs:
           name: "v${{ needs.check_version.outputs.version }}"
           draft: false
           prerelease: false
-          files: plex-skipper.zip
+          files: ${{ env.PROJECT_NAME }}.zip
     
   deploy:
     needs: build
@@ -100,4 +109,4 @@ jobs:
           EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }} 
