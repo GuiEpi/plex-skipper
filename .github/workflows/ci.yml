@@ -15,7 +15,7 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -31,7 +31,7 @@ jobs:
       version: ${{ steps.get_version.outputs.version }}
       version_changed: ${{ steps.check_version.outputs.version_changed }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v4
@@ -60,7 +60,7 @@ jobs:
     if: ${{ needs.check_version.outputs.version_changed == '1' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v4
@@ -74,7 +74,7 @@ jobs:
         run: |
           zip ${{ env.PROJECT_NAME }}.zip ${{ env.DIRECTORY }}/skipper.js ${{ env.DIRECTORY }}/manifest.json ${{ env.DIRECTORY }}/icons/*
       - name: Upload extension artefact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ env.DIRECTORY }}
       - name: Create Release
@@ -100,7 +100,7 @@ jobs:
     environment: ${{ matrix.command }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
       - name: Submit to Google
         if: matrix.command == 'Chrome'
         working-directory: artifact
