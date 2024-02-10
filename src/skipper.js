@@ -1,23 +1,29 @@
+let observer;
+
 async function tryClickingSkipButton() {
-  const skipButtons = document.querySelector('[class*=AudioVideoFullPlayer-overlayButton]');
-  if (skipButtons && window.getComputedStyle(skipButtons).opacity === '1') {
-    skipButtons.click();
-  }
+  chrome.storage.local.get('enableSkipIntroCredit', function(result) {
+    const skipButtons = document.querySelector('[class*=AudioVideoFullPlayer-overlayButton]');
+    if (result.enableSkipIntroCredit && skipButtons) {
+      skipButtons.click();
+    }
+  });
 }
 
 async function tryClickingNextButton() {
-  const checkBox = document.getElementById('autoPlayCheck');
-  if (checkBox && checkBox.checked) {
-    const nextButton = document.querySelector('[class*=AudioVideoUpNext-playButton]');
-    if (nextButton) {
-      nextButton.focus();
-      nextButton.click();
+  chrome.storage.local.get('enablePlayNext', function(result) {
+    const checkBox = document.getElementById('autoPlayCheck');
+    if (result.enablePlayNext && checkBox && checkBox.checked) {
+      const nextButton = document.querySelector('[class*=AudioVideoUpNext-playButton]');
+      if (nextButton) {
+        nextButton.focus();
+        nextButton.click();
+      }
     }
-  }
+  });
 }
 
 function startMutationObserver() {
-  const observer = new MutationObserver((mutations, obs) => {
+  observer = new MutationObserver((mutations, obs) => {
     for (let mutation of mutations) {
       if (mutation.addedNodes.length) {
         tryClickingSkipButton();
@@ -33,7 +39,17 @@ function startMutationObserver() {
   });
 }
 
-startMutationObserver();
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+  for (let key in changes) {
+    if (key === 'isSkipperOn') {
+      if (!changes[key].newValue && observer) {
+        observer.disconnect();
+      } else if (changes[key].newValue) {
+        startMutationObserver();
+      }
+    }
+  }
+});
 
 window.addEventListener('beforeunload', () => {
   observer.disconnect();

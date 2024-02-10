@@ -1,40 +1,66 @@
+global.chrome = {
+    storage: {
+        local: {
+            get: jest.fn((key, callback) => callback({ enablePlayNext: true })),
+        },
+        onChanged: {
+            addListener: jest.fn()
+        }
+    }
+};
+
 const { tryClickingNextButton } = require('../src/skipper');
 
 describe('tryClickingNextButton', () => {
-    test('clicks the next button if it exists and checkbox is checked', () => {
-        // Mock document.querySelector and document.getElementById
-        const mockButton = { focus: jest.fn(), click: jest.fn() };
-        const mockCheckBox = { checked: true };
+    let mockButton;
+
+    beforeEach(() => {
+        // Reset all mocks
+        jest.resetAllMocks();
+
+        // Set up common mocks
+        mockButton = { focus: jest.fn(), click: jest.fn() };
+        mockCheckbox = { checked: true };
         document.querySelector = jest.fn().mockReturnValue(mockButton);
-        document.getElementById = jest.fn().mockReturnValue(mockCheckBox);
+        document.getElementById = jest.fn().mockReturnValue(mockCheckbox);
+    });
+
+    test('clicks the next button if it exists, enablePlayNext is true, and the checkbox is checked', () => {
+        chrome.storage.local.get = jest.fn((key, callback) => callback({ enablePlayNext: true }));
 
         tryClickingNextButton();
 
-        // Assert that button.focus and button.click are called
+        expect(chrome.storage.local.get).toHaveBeenCalledWith('enablePlayNext', expect.any(Function));
         expect(document.getElementById).toHaveBeenCalledWith('autoPlayCheck');
         expect(document.querySelector).toHaveBeenCalledWith('[class*=AudioVideoUpNext-playButton]');
         expect(mockButton.focus).toHaveBeenCalled();
         expect(mockButton.click).toHaveBeenCalled();
     });
 
-    test('does not click the next button if checkbox is not checked', () => {
-        // Mock document.querySelector and document.getElementById
-        const mockButton = { focus: jest.fn(), click: jest.fn() };
-        const mockCheckBox = { checked: false };
-        document.querySelector = jest.fn().mockReturnValue(mockButton);
-        document.getElementById = jest.fn().mockReturnValue(mockCheckBox);
+    test('does not click the next button if enablePlayNext is false', () => {
+        chrome.storage.local.get = jest.fn((key, callback) => callback({ enablePlayNext: false }));
 
         tryClickingNextButton();
 
-        // Assert that button.focus and button.click are not called
+        expect(chrome.storage.local.get).toHaveBeenCalledWith('enablePlayNext', expect.any(Function));
+        expect(mockButton.focus).not.toHaveBeenCalled();
+        expect(mockButton.click).not.toHaveBeenCalled();
+    });
+
+    test('does not click the next button if the checkbox is not checked', () => {
+        chrome.storage.local.get = jest.fn((key, callback) => callback({ enablePlayNext: true }));
+        mockCheckbox.checked = false;
+
+        tryClickingNextButton();
+
+        expect(chrome.storage.local.get).toHaveBeenCalledWith('enablePlayNext', expect.any(Function));
         expect(document.getElementById).toHaveBeenCalledWith('autoPlayCheck');
         expect(mockButton.focus).not.toHaveBeenCalled();
         expect(mockButton.click).not.toHaveBeenCalled();
     });
 
     test('does not throw if the next button does not exist', () => {
-        // Mock document.querySelector to return null
-        document.querySelector = jest.fn().mockReturnValue(null);
+        document.querySelector.mockReturnValue(null);
 
         expect(tryClickingNextButton).not.toThrow();
     });

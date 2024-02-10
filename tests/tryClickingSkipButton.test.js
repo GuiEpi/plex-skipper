@@ -1,36 +1,52 @@
+global.chrome = {
+    storage: {
+        local: {
+            get: jest.fn((key, callback) => callback({ enableSkipIntroCredit: true })),
+            set: jest.fn(),
+        },
+        onChanged: {
+            addListener: jest.fn(),
+        }
+    }
+};
+
 const { tryClickingSkipButton } = require('../src/skipper');
 
 describe('tryClickingSkipButton', () => {
-    test('clicks the button if it has opacity 1', () => {
-        // Mock document.querySelector and window.getComputedStyle
-        const mockButton = { style: { opacity: '1' }, click: jest.fn() };
+    let mockButton;
+
+    beforeEach(() => {
+        // Reset all mocks
+        jest.resetAllMocks();
+
+        // Set up common mocks
+        mockButton = { style: { opacity: '1' }, click: jest.fn() };
         document.querySelector = jest.fn().mockReturnValue(mockButton);
         window.getComputedStyle = jest.fn().mockImplementation(elem => elem.style);
+    });
 
-        tryClickingSkipButton();
-
-        // Assert that button.click is called
+    test('clicks the skip button if it exists, enableSkipIntroCredit is true', async () => {
+        chrome.storage.local.get = jest.fn((key, callback) => callback({ enableSkipIntroCredit: true }));
+    
+        await tryClickingSkipButton();
+    
+        expect(chrome.storage.local.get).toHaveBeenCalledWith('enableSkipIntroCredit', expect.any(Function));
         expect(document.querySelector).toHaveBeenCalledWith('[class*=AudioVideoFullPlayer-overlayButton]');
         expect(mockButton.click).toHaveBeenCalled();
     });
 
-    test('does not click the button if it has opacity 0', () => {
-        // Mock document.querySelector and window.getComputedStyle
-        const mockButton = { style: { opacity: '0' }, click: jest.fn() };
-        document.querySelector = jest.fn().mockReturnValue(mockButton);
-        window.getComputedStyle = jest.fn().mockImplementation(elem => elem.style);
+    test('does not click the skip button if enableSkipIntroCredit is false', async () => {
+        chrome.storage.local.get = jest.fn((key, callback) => callback({ enableSkipIntroCredit: false }));
 
-        tryClickingSkipButton();
+        await tryClickingSkipButton();
 
-        // Assert that button.click is not called
-        expect(document.querySelector).toHaveBeenCalledWith('[class*=AudioVideoFullPlayer-overlayButton]');
+        expect(chrome.storage.local.get).toHaveBeenCalledWith('enableSkipIntroCredit', expect.any(Function));
         expect(mockButton.click).not.toHaveBeenCalled();
     });
 
-    test('does not throw if the button does not exist', () => {
-        // Mock document.querySelector to return null
-        document.querySelector = jest.fn().mockReturnValue(null);
+    test('does not throw if the skip button does not exist', async () => {
+        document.querySelector.mockReturnValue(null);
 
-        expect(tryClickingSkipButton).not.toThrow();
+        await expect(tryClickingSkipButton).not.toThrow();
     });
 });
