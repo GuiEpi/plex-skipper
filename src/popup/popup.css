@@ -84,3 +84,7 @@ input:checked + label:after {
 label:active:after {
     width: 22px;
 }
+
+.no-animation label:after {
+    transition: none;
+}

@@ -3,11 +3,18 @@ var enableSkipIntroCredit;
 var enablePlayNext;
 
 function setDefaultCheckboxState() {
+    document.body.classList.add('no-animation');
+
     chrome.storage.local.get(['enablePlexSkipper', 'enableSkipIntroCredit', 'enablePlayNext'], function(result) {
         enablePlexSkipper.checked = result.enablePlexSkipper !== false;
         enableSkipIntroCredit.checked = result.enableSkipIntroCredit !== false;
         enablePlayNext.checked = result.enablePlayNext !== false;
+
         setCheckboxDisability();
+
+        setTimeout(() => {
+            document.body.classList.remove('no-animation');
+        }, 10); 
     });
 }
 
@@ -42,7 +49,7 @@ function handlePlayNextChange() {
 
 document.addEventListener('DOMContentLoaded', function () {
     enablePlexSkipper = document.getElementById('enablePlexSkipper');
-    enableSkipIntroCredit = document.getElementById('enableSkipIntropCredit');
+    enableSkipIntroCredit = document.getElementById('enableSkipIntroCredit');
     enablePlayNext = document.getElementById('enablePlayNext');
 
     setDefaultCheckboxState();
