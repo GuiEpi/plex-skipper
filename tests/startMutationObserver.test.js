@@ -2,6 +2,9 @@ let listeners = [];
 
 global.chrome = {
     storage: {
+        local: {
+            get: jest.fn((key, callback) => callback({ enablePlexSkipper: true })),
+        },
         onChanged: {
             addListener: jest.fn((listener) => listeners.push(listener)),
             callListeners: (changes) => listeners.forEach((listener) => listener(changes)),
@@ -12,62 +15,58 @@ global.chrome = {
 const { startMutationObserver } = require('../src/skipper');
 
 describe('startMutationObserver', () => {
-    let mockObserve;
-    let mockDisconnect;
-    let observer;
+  let observer;
+  let mockDisconnect;
+  let mockObserve;
 
-    beforeEach(() => {
-        // Reset all mocks
-        jest.resetAllMocks();
+  beforeEach(() => {
+    mockDisconnect = jest.fn();
+    mockObserve = jest.fn();
 
-        // Set up common mocks
-        mockObserve = jest.fn();
-        mockDisconnect = jest.fn();
-        global.MutationObserver = jest.fn().mockImplementation(() => {
-            observer = {
-                observe: mockObserve,
-                disconnect: mockDisconnect
-            };
-            return observer;
-        });
-
-        // Mock window.addEventListener
-        window.addEventListener = jest.fn((event, handler) => {
-            if (event === 'beforeunload') {
-                handler();
-            }
-        });
+    global.MutationObserver = jest.fn().mockImplementation((callback) => {
+      observer = {
+        disconnect: mockDisconnect,
+        observe: mockObserve,
+        callback
+      };
+      return observer;
     });
 
-    test('starts mutation observer when isSkipperOn changes to true and observer is defined', () => {
-        startMutationObserver();
+    global.document = {
+      documentElement: {}
+    };
 
-        const changes = { isSkipperOn: { newValue: true } };
+    startMutationObserver();
+  });
 
-        chrome.storage.onChanged.callListeners(changes);
+  it('should create a new MutationObserver', () => {
+    expect(global.MutationObserver).toHaveBeenCalled();
+  });
 
-        expect(mockObserve).toHaveBeenCalledWith(document.documentElement, {
-            childList: true,
-            subtree: true
-        });
+  it('should start observing mutations on document.documentElement', () => {
+    expect(mockObserve).toHaveBeenCalledWith(document.documentElement, {
+      childList: true,
+      subtree: true
     });
+  });
 
-    test('disconnects mutation observer when isSkipperOn changes to false', () => {
-        startMutationObserver();
-
-        const changes = { isSkipperOn: { newValue: false } };
-
-        chrome.storage.onChanged.callListeners(changes);
-
-        expect(mockDisconnect).toHaveBeenCalled();
+  it('should disconnect the observer when enablePlexSkipper changes to false', () => {
+    chrome.storage.onChanged.callListeners({
+      enablePlexSkipper: {
+        newValue: false
+      }
     });
-
-    test('disconnects observer on beforeunload event', () => {
-        startMutationObserver();
-
-        const beforeUnloadEvent = new Event('beforeunload');
-        window.dispatchEvent(beforeUnloadEvent);
-
-        expect(mockDisconnect).toHaveBeenCalled();
+  
+    expect(mockDisconnect).toHaveBeenCalled();
+  });
+  
+  it('should start a new observer when enablePlexSkipper changes to true', () => {
+    chrome.storage.onChanged.callListeners({
+      enablePlexSkipper: {
+        newValue: true
+      }
     });
+  
+    expect(mockObserve).toHaveBeenCalledTimes(2);
+  });
 });

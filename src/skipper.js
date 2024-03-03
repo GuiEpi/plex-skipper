@@ -39,16 +39,18 @@ function startMutationObserver() {
   });
 }
 
-startMutationObserver();
+chrome.storage.local.get('enablePlexSkipper', function(result) {
+  if (result.enablePlexSkipper !== false) {
+    startMutationObserver();
+  }
+});
 
 chrome.storage.onChanged.addListener(function(changes, namespace) {
-  for (let key in changes) {
-    if (key === 'isSkipperOn') {
-      if (!changes[key].newValue && observer) {
-        observer.disconnect();
-      } else if (changes[key].newValue) {
-        startMutationObserver();
-      }
+  if (changes.enablePlexSkipper) {
+    if (changes.enablePlexSkipper.newValue && observer) {
+      startMutationObserver();
+    } else if (!changes.enablePlexSkipper.newValue && observer) {
+      observer.disconnect();
     }
   }
 });
