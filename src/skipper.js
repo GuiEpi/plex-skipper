@@ -39,6 +39,8 @@ function startMutationObserver() {
   });
 }
 
+startMutationObserver();
+
 chrome.storage.onChanged.addListener(function(changes, namespace) {
   for (let key in changes) {
     if (key === 'isSkipperOn') {
