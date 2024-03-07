@@ -37,6 +37,18 @@ describe('tryClickingNextButton', () => {
         expect(mockButton.click).toHaveBeenCalled();
     });
 
+    test('clicks the next button if the checkbox is checked and enablePlayNext is not set', () => {
+        chrome.storage.local.get = jest.fn((key, callback) => callback({}));
+
+        tryClickingNextButton();
+
+        expect(chrome.storage.local.get).toHaveBeenCalledWith('enablePlayNext', expect.any(Function));
+        expect(document.getElementById).toHaveBeenCalledWith('autoPlayCheck');
+        expect(document.querySelector).toHaveBeenCalledWith('[class*=AudioVideoUpNext-playButton]');
+        expect(mockButton.focus).toHaveBeenCalled();
+        expect(mockButton.click).toHaveBeenCalled();
+    });
+
     test('does not click the next button if enablePlayNext is false', () => {
         chrome.storage.local.get = jest.fn((key, callback) => callback({ enablePlayNext: false }));
 

@@ -35,6 +35,16 @@ describe('tryClickingSkipButton', () => {
         expect(mockButton.click).toHaveBeenCalled();
     });
 
+    test('clicks the skip button if the enableSkipIntroCredit is not set', async () => {
+        chrome.storage.local.get = jest.fn((key, callback) => callback({}));
+    
+        await tryClickingSkipButton();
+    
+        expect(chrome.storage.local.get).toHaveBeenCalledWith('enableSkipIntroCredit', expect.any(Function));
+        expect(document.querySelector).toHaveBeenCalledWith('[class*=AudioVideoFullPlayer-overlayButton]');
+        expect(mockButton.click).toHaveBeenCalled();
+    });
+
     test('does not click the skip button if enableSkipIntroCredit is false', async () => {
         chrome.storage.local.get = jest.fn((key, callback) => callback({ enableSkipIntroCredit: false }));
 
