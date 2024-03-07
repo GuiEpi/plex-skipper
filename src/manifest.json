@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Plex Skipper",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Automatically clicks the 'Skip Intro', 'Skip Credits' and 'Play next' (if autoplay is activated) buttons on Plex.",
   "action": {
     "default_popup": "popup/popup.html"
@@ -11,7 +11,10 @@
   ],
   "content_scripts": [
     {
-      "matches": ["*://app.plex.tv/*"],
+      "matches": [
+        "*://app.plex.tv/*", 
+        "http://*/web/*"
+      ],
       "js": ["skipper.js"]
     }
   ],
