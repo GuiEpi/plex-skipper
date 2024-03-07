@@ -3,7 +3,7 @@ let observer;
 async function tryClickingSkipButton() {
   chrome.storage.local.get('enableSkipIntroCredit', function(result) {
     const skipButtons = document.querySelector('[class*=AudioVideoFullPlayer-overlayButton]');
-    if (result.enableSkipIntroCredit && skipButtons) {
+    if (result.enableSkipIntroCredit !== false && skipButtons) {
       skipButtons.click();
     }
   });
@@ -12,7 +12,7 @@ async function tryClickingSkipButton() {
 async function tryClickingNextButton() {
   chrome.storage.local.get('enablePlayNext', function(result) {
     const checkBox = document.getElementById('autoPlayCheck');
-    if (result.enablePlayNext && checkBox && checkBox.checked) {
+    if (result.enablePlayNext !== false && checkBox && checkBox.checked) {
       const nextButton = document.querySelector('[class*=AudioVideoUpNext-playButton]');
       if (nextButton) {
         nextButton.focus();
