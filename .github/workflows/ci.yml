@@ -72,7 +72,7 @@ jobs:
         run: npm run build
       - name: Zip extension
         run: |
-          zip ${{ env.PROJECT_NAME }}.zip ${{ env.DIRECTORY }}/skipper.js ${{ env.DIRECTORY }}/manifest.json ${{ env.DIRECTORY }}/icons/*
+          zip ${{ env.PROJECT_NAME }}.zip ${{ env.DIRECTORY }}/*
       - name: Upload extension artefact
         uses: actions/upload-artifact@v4
         with:
