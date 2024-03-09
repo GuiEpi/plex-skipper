@@ -1,5 +1,5 @@
 env:
-  DIRECTORY: dist
+  DIRECTORY: .output
   PROJECT_NAME: plex-skipper
 
 
@@ -73,9 +73,9 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            .output/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-chrome.zip
-            .output/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-firefox.zip
-            .output/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-sources.zip
+            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-chrome.zip
+            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-firefox.zip
+            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-sources.zip
 
   Submit:
     needs: [Build, Version]
@@ -91,8 +91,8 @@ jobs:
       - name: Submit to stores
         working-directory: artifact
         run: pnpm wxt submit\
-          --chrome-zip .output/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-chrome.zip
-          # --firefox-zip .output/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-firefox.zip --firefox-sources-zip .output/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-sources.zip
+          --chrome-zip ${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-chrome.zip
+          # --firefox-zip ${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-firefox.zip --firefox-sources-zip ${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-sources.zip
         env:
           CHROME_EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
           CHROME_CLIENT_ID: ${{ secrets.CLIENT_ID }}
