@@ -45,10 +45,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v3
         with:
-          node-version-file: .nvmrc
-          cache: pnpm
+          version: 8
       - name: Build chrome
         run: pnpm run build
       - name: Build firefox
@@ -84,10 +83,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v3
         with:
-          node-version-file: .nvmrc
-          cache: pnpm
+          version: 8
       - name: Submit to stores
         working-directory: artifact
         run: pnpm wxt submit\
