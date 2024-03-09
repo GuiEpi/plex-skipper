@@ -10,10 +10,8 @@ export default defineContentScript({
   main() {
     enablePlexSkipper.watch((newValue, oldValue) => {
       if (!newValue) {
-        console.log('Plex Skipper disabled');
         observer.disconnect();
       } else if (newValue) {
-        console.log('Plex Skipper enabled');
         observer.observe(document, observerOptions);
       } 
     });
@@ -35,7 +33,6 @@ export default defineContentScript({
 
     const observer = new MutationObserver(tryClickingButtons);
 
-    console.log('Plex Skipper content script loaded');
     startMutationObserver(observer, observerOptions);
 
     window.addEventListener('beforeunload', () => {
