@@ -2,7 +2,7 @@ env:
   DIRECTORY: .output
   PROJECT_NAME: plex-skipper
 
-name: Release
+name: Deploy
 
 on:
   push:
