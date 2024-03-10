@@ -41,13 +41,14 @@ jobs:
     if: ${{ needs.Version.outputs.version_changed == '1' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v3
         with:
           version: 'latest'
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: .nvmrc
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
