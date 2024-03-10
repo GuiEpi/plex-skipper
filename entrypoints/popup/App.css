@@ -31,7 +31,7 @@ h1 {
   align-items: center;
 }
 
-input[type=checkbox] {
+input[type="checkbox"] {
   height: 0;
   width: 0;
   visibility: hidden;
@@ -49,7 +49,7 @@ label {
 }
 
 label:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 5px;
   left: 5px;
