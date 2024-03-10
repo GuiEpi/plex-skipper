@@ -25,6 +25,10 @@ h1 {
   text-align: center;
 }
 
+p {
+  width: 80%;
+}
+
 .switch {
   display: flex;
   justify-content: space-between;
@@ -75,4 +79,8 @@ input:checked + label:after {
 
 label:active:after {
   width: 22px;
+}
+
+.no-animation label:after {
+  transition: none;
 }
