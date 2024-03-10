@@ -36,7 +36,7 @@ jobs:
           VERSION=$(jq -r .version package.json)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-  Build:
+  Submit:
     needs: Version
     if: ${{ needs.Version.outputs.version_changed == '1' }}
     runs-on: ubuntu-latest
@@ -60,41 +60,6 @@ jobs:
         run: |
           pnpm run zip && 
           pnpm run zip:firefox
-      - name: Upload ZIP files as artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: extension-zips
-          path: |
-            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-chrome.zip
-            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-firefox.zip
-            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-sources.zip
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        with:
-          tag_name: "v${{ needs.Version.outputs.version }}"
-          name: "v${{ needs.Version.outputs.version }}"
-          draft: false
-          prerelease: false
-          files: |
-            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-chrome.zip
-            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-firefox.zip
-            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-sources.zip
-
-  Submit:
-    needs: [Build, Version]
-    if: ${{ needs.Version.outputs.version_changed == '1' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 'latest'
-      - name: Download ZIP files
-        uses: actions/download-artifact@v4
-        with:
-          name: extension-zips
-          path: ${{ env.DIRECTORY }}
       - name: Submit to stores
         run: |
           pnpm wxt submit \
@@ -108,4 +73,17 @@ jobs:
           CHROME_REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
           # FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
           # FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
-          # FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+            # FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        with:
+          tag_name: "v${{ needs.Version.outputs.version }}"
+          name: "v${{ needs.Version.outputs.version }}"
+          draft: false
+          prerelease: false
+          files: |
+            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-chrome.zip
+            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-firefox.zip
+            ${{ env.DIRECTORY }}/${{env.PROJECT_NAME}}-${{ needs.Version.outputs.version }}-sources.zip
