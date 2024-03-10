@@ -52,10 +52,6 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - name: Build extensions
-        run: |
-          pnpm run build && 
-          pnpm run build:firefox
       - name: Zip extensions
         run: |
           pnpm run zip && 
