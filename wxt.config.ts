@@ -8,5 +8,8 @@ export default defineConfig({
   }),
   manifest: {
     permissions: ['storage'],
+    name: 'Plex skipper',
+    description: '__MSG_extDescription__',
+    default_locale: 'en',
   },
 });

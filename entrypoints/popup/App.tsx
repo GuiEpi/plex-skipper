@@ -60,7 +60,7 @@ function App() {
       </header>
       <div id="switch-section">
         <div className="switch">
-          <p>Enable automatic intros/credits switching</p>
+          <p>{browser.i18n.getMessage('enableIntroCreditSwitching')}</p>
           <input 
             type="checkbox" 
             id="enableSkipIntroCredit"
@@ -71,7 +71,7 @@ function App() {
           <label htmlFor="enableSkipIntroCredit"></label>
         </div>
         <div className="switch">
-          <p>Activate "play next" instantly</p>
+          <p>{browser.i18n.getMessage('enablePlayNext')}</p>
           <input 
             type="checkbox" 
             id="enablePlayNext"

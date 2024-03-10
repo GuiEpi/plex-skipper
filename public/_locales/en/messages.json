@@ -1,0 +1,11 @@
+{
+	"extDescription": {
+		"message": "Automatically clicks the 'Skip Intro', 'Skip Credits' and 'Play next' buttons on Plex."
+	},
+	"enableIntroCreditSwitching": {
+		"message": "Enable automatic skip intro and credits"
+	},
+	"enablePlayNext": {
+		"message": "Enable 'play next' instantly"
+	}
+}
