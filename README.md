@@ -5,12 +5,12 @@
 ![Deploy](https://github.com/GuiEpi/plex-skipper/actions/workflows/deploy.yml/badge.svg)
 [![wxt](https://img.shields.io/badge/wxt-ff0?logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8zMDVfNDkwKSI+CjxwYXRoIGQ9Ik0zNDguNjA4IDQ5MkMzODQuOTA1IDQ5MiA0MTQuMzI5IDQ2Mi41NzYgNDE0LjMyOSA0MjYuMjc5VjM2MC41NTdINDI2LjI3OUM0NjIuNTc2IDM2MC41NTcgNDkyIDMzMS4xMzIgNDkyIDI5NC44MzVDNDkyIDI1OC41MzggNDYyLjU3NiAyMjkuMTE0IDQyNi4yNzkgMjI5LjExNEg0MTQuMzI5VjE2My4zOTJDNDE0LjMyOSAxMjcuMDk1IDM4NC45MDUgOTcuNjcwOSAzNDguNjA4IDk3LjY3MDlIMjgyLjg4NlY4NS43MjE1QzI4Mi44ODYgNDkuNDI0NSAyNTMuNDYyIDIwIDIxNy4xNjUgMjBDMTgwLjg2OCAyMCAxNTEuNDQzIDQ5LjQyNDUgMTUxLjQ0MyA4NS43MjE1Vjk3LjY3MDlIODUuNzIxNUM0OS40MjQ1IDk3LjY3MDkgMjAgMTI3LjA5NSAyMCAxNjMuMzkyVjIyOS4xMTRIMzEuOTQ5NEM2OC4yNDY0IDIyOS4xMTQgOTcuNjcwOSAyNTguNTM4IDk3LjY3MDkgMjk0LjgzNUM5Ny42NzA5IDMzMS4xMzIgNjguMjQ2NCAzNjAuNTU3IDMxLjk0OTQgMzYwLjU1N0gyMFY0OTJIMTUxLjQ0M1Y0ODAuMDUxQzE1MS40NDMgNDQzLjc1NCAxODAuODY4IDQxNC4zMjkgMjE3LjE2NSA0MTQuMzI5QzI1My40NjIgNDE0LjMyOSAyODIuODg2IDQ0My43NTQgMjgyLjg4NiA0ODAuMDUxVjQ5MkgzNDguNjA4WiIgc3Ryb2tlPSIjNjdENTVFIiBzdHJva2Utd2lkdGg9IjQwIi8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfMzA1XzQ5MCI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=&labelColor=grey&color=%2367D55E)](https://wxt.dev)
 
-Plex Skipper is a Chrome extension designed to enhance your viewing experience on Plex. It automatically clicks the "Skip Intro", "Skip Credits" and "Play next" buttons, allowing you to seamlessly watch your favorite shows and movies without interruptions.
+Plex Skipper is a Chrome extension designed to enhance your viewing experience on Plex. It **automatically clicks** the **"Skip Intro"**, **"Skip Credits"** and **"Play next"** buttons, allowing you to seamlessly watch your favorite shows and movies without interruptions.
 
 ## Features
 * Automatically detects and clicks the "Skip Intro" button when it appears.
 * Automatically detects and clicks the "Skip Credits" button at the end of a show or movie.
-* Automatically detects and clicks the "Play next" button when your series moves on to the next episode if autoplay is activated.
+* Automatically detects and clicks the "Play next" button when your series moves on to the next episode **if autoplay is activated**.
 * Runs quietly in the background with minimal impact on performance.
 
 ## Installation
@@ -22,7 +22,7 @@ Plex Skipper is a Chrome extension designed to enhance your viewing experience o
 [<img src="https://raw.githubusercontent.com/alrra/browser-logos/90fdf03c/src/firefox/firefox.svg" width="48" alt="Firefox" valign="middle">][link-firefox] [<img valign="middle" src="https://img.shields.io/amo/v/plex-skipper.svg?label=%20">][link-firefox]
 
 ### By downloading .zip
-### Google Chrome
+#### Google Chrome
 
 1. Download the `plex-skipper-<version>-chrome.zip` file from the [latest release](https://github.com/GuiEpi/plex-skipper/releases).
 2. Extract the contents of the `.zip` file.
@@ -31,7 +31,7 @@ Plex Skipper is a Chrome extension designed to enhance your viewing experience o
 5. Click on "Load unpacked" and select the `dist` folder.
 6. Plex Skipper should now appear in your list of Chrome extensions and is ready to use.
 
-### Firefox
+#### Firefox
 
 1. Download the `plex-skipper-<version>-firefox.zip` file from the [latest release](https://github.com/GuiEpi/plex-skipper/releases).
 3. Open Firefox and navigate to `about:addons`.
@@ -43,7 +43,7 @@ Plex Skipper is a Chrome extension designed to enhance your viewing experience o
 Simply navigate to the Plex website and start watching any video. The extension will work in the background to detect and click the "Skip Intro", "Skip Credits" and "Play next" buttons.
 
 ## Support
-If you encounter any issues or have suggestions for improvements, please feel free to open an issue in this repository.
+If you encounter any issues or have suggestions for improvements, please feel free to [open an issue in this repository](https://github.com/GuiEpi/plex-skipper/issues/new).
 
 ## Disclaimer
 This extension is not officially affiliated with Plex and was created as a utility to improve the user experience.
