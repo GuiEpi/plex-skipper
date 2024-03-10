@@ -2,7 +2,7 @@
   "name": "plex-skipper",
   "description": "Automatically clicks the 'Skip Intro', 'Skip Credits' and 'Play next' buttons on Plex.",
   "private": false,
-  "version": "2.0.9",
+  "version": "2.0.10",
   "type": "module",
   "scripts": {
     "dev": "wxt",
