@@ -1,10 +1,12 @@
 {
   "name": "plex-skipper",
-  "description": "Automatically clicks the 'Skip Intro', 'Skip Credits' and 'Play next' buttons on Plex.",
+  "description": "manifest.json description",
   "private": false,
-  "version": "2.0.10",
+  "version": "2.1.0",
   "type": "module",
   "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox",
     "build": "wxt build",
@@ -23,6 +25,7 @@
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
     "@vitejs/plugin-react": "^4.2.1",
+    "prettier": "3.2.5",
     "typescript": "^5.4.2",
     "wxt": "^0.17.7"
   }
