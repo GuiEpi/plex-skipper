@@ -41,12 +41,6 @@ export default defineContentScript({
     const observer = new MutationObserver(tryClickingButtons);
 
     startMutationObserver(observer, observerOptions);
-
-    window.addEventListener("beforeunload", () => {
-      if (observer) {
-        observer.disconnect();
-      }
-    });
   },
 });
 
