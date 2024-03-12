@@ -13,14 +13,14 @@ function App() {
   const [playNext, setPlayNext] = useState<boolean>(true);
 
   async function getStoredData() {
-    document.body.classList.add('no-animation');
+    document.body.classList.add("no-animation");
 
     setPlexSkipper(await enablePlexSkipper.getValue());
     setSkipIntroCredit(await enableSkipIntroCredit.getValue());
     setPlayNext(await enablePlayNext.getValue());
 
     setTimeout(() => {
-      document.body.classList.remove('no-animation');
+      document.body.classList.remove("no-animation");
     }, 20);
   }
 
