@@ -60,7 +60,11 @@ const tryClickingSkipButton = async () => {
     "[class*=AudioVideoFullPlayer-overlayButton]",
   ) as HTMLButtonElement;
   if (skipIntroCredit && skipButtons) {
-    skipButtons.click();
+    if (skipButtons.classList.contains("isFocused")) {
+      skipButtons.click();
+    } else {
+      simulateClick(skipButtons);
+    }
   }
 };
 
@@ -76,4 +80,17 @@ const tryClickingNextButton = async () => {
       nextButton.click();
     }
   }
+};
+
+const simulateClick = (element: HTMLButtonElement) => {
+  ["mousedown", "mouseup", "click"].forEach((eventType) => {
+    element.dispatchEvent(
+      new MouseEvent(eventType, {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+        buttons: 1,
+      }),
+    );
+  });
 };
