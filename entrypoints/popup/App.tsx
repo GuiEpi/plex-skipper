@@ -3,20 +3,23 @@ import plexSkipperLogo from "/plex-skipper.png";
 import {
   enablePlayNext,
   enablePlexSkipper,
-  enableSkipIntroCredit,
+  enableSkipIntro,
+  enableSkipCredits,
 } from "@/utils/storage";
 import "./App.css";
 
 function App() {
   const [plexSkipper, setPlexSkipper] = useState<boolean>(true);
-  const [skipIntroCredit, setSkipIntroCredit] = useState<boolean>(true);
+  const [skipIntro, setSkipIntro] = useState<boolean>(true);
+  const [skipCredits, setSkipCredits] = useState<boolean>(true);
   const [playNext, setPlayNext] = useState<boolean>(true);
 
   async function getStoredData() {
     document.body.classList.add("no-animation");
 
     setPlexSkipper(await enablePlexSkipper.getValue());
-    setSkipIntroCredit(await enableSkipIntroCredit.getValue());
+    setSkipIntro(await enableSkipIntro.getValue());
+    setSkipCredits(await enableSkipCredits.getValue());
     setPlayNext(await enablePlayNext.getValue());
 
     setTimeout(() => {
@@ -30,18 +33,25 @@ function App() {
 
   const handlePlexSkipperChange = async (checked: boolean) => {
     setPlexSkipper(checked);
-    setSkipIntroCredit(checked);
+    setSkipIntro(checked);
+    setSkipCredits(checked);
     setPlayNext(checked);
     await Promise.all([
       enablePlexSkipper.setValue(checked),
-      enableSkipIntroCredit.setValue(checked),
+      enableSkipIntro.setValue(checked),
+      enableSkipCredits.setValue(checked),
       enablePlayNext.setValue(checked),
     ]);
   };
 
-  const handleSkipIntroCreditChange = async (checked: boolean) => {
-    setSkipIntroCredit(checked);
-    await enableSkipIntroCredit.setValue(checked);
+  const handleSkipIntroChange = async (checked: boolean) => {
+    setSkipIntro(checked);
+    await enableSkipIntro.setValue(checked);
+  };
+
+  const handleSkipCreditsChange = async (checked: boolean) => {
+    setSkipCredits(checked);
+    await enableSkipCredits.setValue(checked);
   };
 
   const handlePlayNextChange = async (checked: boolean) => {
@@ -76,17 +86,30 @@ function App() {
       </header>
       <div id="switch-section">
         <div className="switch">
-          <p>{browser.i18n.getMessage("enableIntroCreditSwitching")}</p>
+          <p>{browser.i18n.getMessage("enableIntroSwitching")}</p>
           <input
             type="checkbox"
-            id="enableSkipIntroCredit"
-            checked={skipIntroCredit}
+            id="enableSkipIntro"
+            checked={skipIntro}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleSkipIntroCreditChange(event.target.checked)
+              handleSkipIntroChange(event.target.checked)
             }
             disabled={!plexSkipper}
           />
-          <label htmlFor="enableSkipIntroCredit"></label>
+          <label htmlFor="enableSkipIntro"></label>
+        </div>
+        <div className="switch">
+          <p>{browser.i18n.getMessage("enableCreditsSwitching")}</p>
+          <input
+            type="checkbox"
+            id="enableSkipCredits"
+            checked={skipCredits}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleSkipCreditsChange(event.target.checked)
+            }
+            disabled={!plexSkipper}
+          />
+          <label htmlFor="enableSkipCredits"></label>
         </div>
         <div className="switch">
           <p>{browser.i18n.getMessage("enablePlayNext")}</p>

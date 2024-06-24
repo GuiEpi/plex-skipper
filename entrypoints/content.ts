@@ -1,7 +1,8 @@
 import {
   enablePlayNext,
   enablePlexSkipper,
-  enableSkipIntroCredit,
+  enableSkipIntro,
+  enableSkipCredits,
 } from "@/utils/storage";
 
 interface observerOptions {
@@ -54,21 +55,21 @@ const startMutationObserver = async (
   }
 };
 
-const tryClickingSkipButton = async () => {
-  const skipIntroCredit = await enableSkipIntroCredit.getValue();
+const tryClickingSkipButton = async (): Promise<void> => {
+  const skipIntro = await enableSkipIntro.getValue();
+  const skipCredits = await enableSkipCredits.getValue();
+  const section = await determinePlaybackSection();
   const skipButtons = document.querySelector(
     "[class*=AudioVideoFullPlayer-overlayButton]",
   ) as HTMLButtonElement;
-  if (skipIntroCredit && skipButtons) {
-    if (skipButtons.classList.contains("isFocused")) {
-      skipButtons.click();
-    } else {
-      simulateClick(skipButtons);
-    }
+  if (skipIntro && section === "INTRO" && skipButtons) {
+    clickSkipButton(skipButtons);
+  } else if (skipCredits && section === "CREDITS" && skipButtons) {
+    clickSkipButton(skipButtons);
   }
 };
 
-const tryClickingNextButton = async () => {
+const tryClickingNextButton = async (): Promise<void> => {
   const skipIntroCredit = await enablePlayNext.getValue();
   const checkBox = document.getElementById("autoPlayCheck") as HTMLInputElement;
   if (skipIntroCredit && checkBox && checkBox.checked) {
@@ -82,7 +83,14 @@ const tryClickingNextButton = async () => {
   }
 };
 
-const simulateClick = (element: HTMLButtonElement) => {
+const clickSkipButton = (skipButtons: HTMLButtonElement) => {
+  if (!skipButtons.classList.contains("isFocused")) {
+    simulateClick(skipButtons);
+  }
+  skipButtons.click();
+};
+
+const simulateClick = (element: HTMLButtonElement): void => {
   ["mousedown", "mouseup", "click"].forEach((eventType) => {
     element.dispatchEvent(
       new MouseEvent(eventType, {
@@ -93,4 +101,24 @@ const simulateClick = (element: HTMLButtonElement) => {
       }),
     );
   });
+};
+
+const determinePlaybackSection = async (): Promise<
+  "INTRO" | "CREDITS" | "UNKNOWN"
+> => {
+  const slider: HTMLButtonElement | null = document.querySelector(
+    "[class*=Slider-thumb-]:not([aria-labelledby])",
+  );
+  if (!slider) {
+    return "UNKNOWN";
+  }
+
+  const valuenow = parseInt(slider.getAttribute("aria-valuenow") || "0", 10);
+  const valuemax = parseInt(slider.getAttribute("aria-valuemax") || "1", 10);
+  const progress = (valuenow / valuemax) * 100;
+
+  if (progress < 50) {
+    return "INTRO";
+  }
+  return "CREDITS";
 };
