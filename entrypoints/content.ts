@@ -13,7 +13,7 @@ interface observerOptions {
 export default defineContentScript({
   matches: ["*://app.plex.tv/*", "http://*/web/*"],
   main() {
-    enablePlexSkipper.watch((newValue, oldValue) => {
+    enablePlexSkipper.watch((newValue: boolean, oldValue: boolean) => {
       if (!newValue) {
         observer.disconnect();
       } else if (newValue) {
@@ -45,37 +45,59 @@ export default defineContentScript({
   },
 });
 
+/**
+ * Start the MutationObserver.
+ */
 const startMutationObserver = async (
   observer: MutationObserver,
   observerOptions: observerOptions,
-) => {
+): Promise<void> => {
   const plexSkipper = await enablePlexSkipper.getValue();
   if (plexSkipper) {
     observer.observe(document, observerOptions);
   }
 };
 
+/**
+ * Try clicking on the buttons to skip the intro and credits.
+ */
 const tryClickingSkipButton = async (): Promise<void> => {
+  const skipButtons: HTMLButtonElement | null = document.querySelector(
+    "[class*=AudioVideoFullPlayer-overlayButton]",
+  );
+  if (!skipButtons) return;
   const skipIntro = await enableSkipIntro.getValue();
   const skipCredits = await enableSkipCredits.getValue();
-  const section = await determinePlaybackSection();
-  const skipButtons = document.querySelector(
-    "[class*=AudioVideoFullPlayer-overlayButton]",
-  ) as HTMLButtonElement;
-  if (skipIntro && section === "INTRO" && skipButtons) {
+
+  if (skipIntro && skipCredits) {
     clickSkipButton(skipButtons);
-  } else if (skipCredits && section === "CREDITS" && skipButtons) {
-    clickSkipButton(skipButtons);
+  } else {
+    const section = await determinePlaybackSection();
+
+    if (
+      (skipIntro && section === "intro") ||
+      (skipCredits && section === "credits")
+    ) {
+      clickSkipButton(skipButtons);
+    }
   }
 };
 
+/**
+ * Try clicking on the button to skip to the next episode (only if autoplay is enabled).
+ */
 const tryClickingNextButton = async (): Promise<void> => {
   const skipIntroCredit = await enablePlayNext.getValue();
-  const checkBox = document.getElementById("autoPlayCheck") as HTMLInputElement;
-  if (skipIntroCredit && checkBox && checkBox.checked) {
+  if (!skipIntroCredit) return;
+  const checkBox: HTMLInputElement | null = document.getElementById(
+    "autoPlayCheck",
+  ) as HTMLInputElement;
+
+  if (checkBox && checkBox.checked) {
     const nextButton = document.querySelector(
       "[class*=AudioVideoUpNext-playButton]",
     ) as HTMLButtonElement;
+
     if (nextButton) {
       nextButton.focus();
       nextButton.click();
@@ -83,6 +105,9 @@ const tryClickingNextButton = async (): Promise<void> => {
   }
 };
 
+/**
+ * Choose the right method to click the skip button.
+ */
 const clickSkipButton = (skipButtons: HTMLButtonElement) => {
   if (!skipButtons.classList.contains("isFocused")) {
     simulateClick(skipButtons);
@@ -90,6 +115,9 @@ const clickSkipButton = (skipButtons: HTMLButtonElement) => {
   skipButtons.click();
 };
 
+/**
+ * Simulate a click event on the button.
+ */
 const simulateClick = (element: HTMLButtonElement): void => {
   ["mousedown", "mouseup", "click"].forEach((eventType) => {
     element.dispatchEvent(
@@ -103,14 +131,17 @@ const simulateClick = (element: HTMLButtonElement): void => {
   });
 };
 
+/**
+ * Determine the current playback section.
+ */
 const determinePlaybackSection = async (): Promise<
-  "INTRO" | "CREDITS" | "UNKNOWN"
+  "intro" | "credits" | "unknown"
 > => {
   const slider: HTMLButtonElement | null = document.querySelector(
     "[class*=Slider-thumb-]:not([aria-labelledby])",
   );
   if (!slider) {
-    return "UNKNOWN";
+    return "unknown";
   }
 
   const valuenow = parseInt(slider.getAttribute("aria-valuenow") || "0", 10);
@@ -118,7 +149,7 @@ const determinePlaybackSection = async (): Promise<
   const progress = (valuenow / valuemax) * 100;
 
   if (progress < 50) {
-    return "INTRO";
+    return "intro";
   }
-  return "CREDITS";
+  return "credits";
 };
