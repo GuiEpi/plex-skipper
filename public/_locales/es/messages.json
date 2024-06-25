@@ -1,0 +1,14 @@
+{
+  "extDescription": {
+    "message": "Hace clic automáticamente en los botones 'Saltar introducción', 'Saltar créditos' y 'Reproducir siguiente' de Plex."
+  },
+  "enableIntroSwitching": {
+    "message": "Saltar la introducción"
+  },
+  "enableCreditsSwitching": {
+    "message": "Saltar créditos"
+  },
+  "enablePlayNext": {
+    "message": "Saltar al siguiente episodio"
+  }
+}
