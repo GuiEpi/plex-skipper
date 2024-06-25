@@ -3,12 +3,12 @@
     "message": "Automatically clicks the 'Skip Intro', 'Skip Credits' and 'Play next' buttons on Plex."
   },
   "enableIntroSwitching": {
-    "message": "Enable automatic skip intro"
+    "message": "Skip intro"
   },
   "enableCreditsSwitching": {
-    "message": "Enable automatic skip credits"
+    "message": "Skip credits"
   },
   "enablePlayNext": {
-    "message": "Enable 'play next' instantly"
+    "message": "Skip to next episode"
   }
 }

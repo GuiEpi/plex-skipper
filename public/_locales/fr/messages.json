@@ -3,12 +3,12 @@
     "message": "Clique automatiquement sur les boutons 'Passer l'intro', 'Passer le générique' et 'Lecture du suivant' sur Plex."
   },
   "enableIntroSwitching": {
-    "message": "Activer passer l'intro automatiquement"
+    "message": "Passer l'intro"
   },
   "enableCreditsSwitching": {
-    "message": "Activer passer le générique automatiquement"
+    "message": "Passer les crédits"
   },
   "enablePlayNext": {
-    "message": "Activer 'lecture du suivant' instantanément"
+    "message": "Passer à l'épisode suivant"
   }
 }
