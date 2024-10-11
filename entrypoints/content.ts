@@ -3,6 +3,8 @@ import {
   enablePlexSkipper,
   enableSkipIntro,
   enableSkipCredits,
+  delaySkipCredits,
+  delaySkipIntro,
 } from "@/utils/storage";
 
 interface observerOptions {
@@ -23,7 +25,7 @@ export default defineContentScript({
 
     function tryClickingButtons(
       records: MutationRecord[],
-      observer: MutationObserver,
+      _: MutationObserver,
     ) {
       for (let record of records) {
         if (record.addedNodes.length) {
@@ -68,18 +70,15 @@ const tryClickingSkipButton = async (): Promise<void> => {
   if (!skipButtons) return;
   const skipIntro = await enableSkipIntro.getValue();
   const skipCredits = await enableSkipCredits.getValue();
+  const delayIntro = await delaySkipIntro.getValue();
+  const delayCredits = await delaySkipCredits.getValue();
 
-  if (skipIntro && skipCredits) {
-    clickSkipButton(skipButtons);
-  } else {
-    const section = await determinePlaybackSection();
+  const section = await determinePlaybackSection();
 
-    if (
-      (skipIntro && section === "intro") ||
-      (skipCredits && section === "credits")
-    ) {
-      clickSkipButton(skipButtons);
-    }
+  if (skipIntro && section === "intro") {
+    clickSkipButton(skipButtons, delayIntro);
+  } else if (skipCredits && section === "credits") {
+    clickSkipButton(skipButtons, delayCredits);
   }
 };
 
@@ -108,11 +107,13 @@ const tryClickingNextButton = async (): Promise<void> => {
 /**
  * Choose the right method to click the skip button.
  */
-const clickSkipButton = (skipButtons: HTMLButtonElement) => {
-  if (!skipButtons.classList.contains("isFocused")) {
-    simulateClick(skipButtons);
-  }
-  skipButtons.click();
+const clickSkipButton = (skipButtons: HTMLButtonElement, delay: number) => {
+  setTimeout(() => {
+    if (!skipButtons.classList.contains("isFocused")) {
+      simulateClick(skipButtons);
+    }
+    skipButtons.click();
+  }, delay);
 };
 
 /**

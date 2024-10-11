@@ -20,9 +20,19 @@ const enablePlayNext = storage.defineItem<boolean>("local:enablePlayNext", {
   defaultValue: true,
 });
 
+const delaySkipIntro = storage.defineItem<number>("local:delaySkipIntro", {
+  defaultValue: 0,
+});
+
+const delaySkipCredits = storage.defineItem<number>("local:delaySkipCredits", {
+  defaultValue: 0,
+});
+
 export {
   enablePlexSkipper,
   enableSkipIntro,
   enableSkipCredits,
   enablePlayNext,
+  delaySkipCredits,
+  delaySkipIntro,
 };

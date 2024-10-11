@@ -1,11 +1,8 @@
 import { defineConfig } from "wxt";
-import react from "@vitejs/plugin-react";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  vite: () => ({
-    plugins: [react()],
-  }),
+  modules: ["@wxt-dev/module-react"],
   manifest: {
     permissions: ["storage"],
     name: "Plex skipper",

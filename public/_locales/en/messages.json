@@ -10,5 +10,11 @@
   },
   "enablePlayNext": {
     "message": "Skip to next episode"
+  },
+  "delayLabel": {
+    "message": "Delay"
+  },
+  "delayButton": {
+    "message": "Reset"
   }
 }

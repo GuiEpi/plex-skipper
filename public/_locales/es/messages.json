@@ -10,5 +10,11 @@
   },
   "enablePlayNext": {
     "message": "Saltar al siguiente episodio"
+  },
+  "delayLabel": {
+    "message": "Retraso"
+  },
+  "delayButton": {
+    "message": "Reiniciar"
   }
 }

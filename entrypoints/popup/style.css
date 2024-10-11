@@ -26,6 +26,10 @@ p {
   font-size: 13px;
 }
 
+hr {
+  margin: 20px 0;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
