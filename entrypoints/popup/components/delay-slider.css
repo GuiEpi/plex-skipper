@@ -19,16 +19,6 @@
   accent-color: #e5a00d;
 }
 
-.delay-slider input[type="range"]::-webkit-slider-thumb {
-  background: #e5a00d;
-  cursor: pointer;
-}
-
-.delay-slider input[type="range"]::-moz-range-thumb {
-  background: #e5a00d;
-  cursor: pointer;
-}
-
 .slider-header {
   display: flex;
   justify-content: space-between;
