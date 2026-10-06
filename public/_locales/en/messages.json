@@ -16,5 +16,14 @@
   },
   "delayButton": {
     "message": "Reset"
+  },
+  "serverEnable": {
+    "message": "Enable on this Plex server"
+  },
+  "serverEnabled": {
+    "message": "Enabled on this Plex server"
+  },
+  "serverDisable": {
+    "message": "Disable"
   }
 }

@@ -1,0 +1,26 @@
+#server-access {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#server-access button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background-color: #e5a00d;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#server-access button.link {
+  flex: 0;
+  background: none;
+  color: inherit;
+  text-decoration: underline;
+  font-weight: normal;
+}

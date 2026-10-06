@@ -13,7 +13,7 @@ interface observerOptions {
 }
 
 export default defineContentScript({
-  matches: ["*://app.plex.tv/*", "*://*/web/*"],
+  matches: ["*://app.plex.tv/*"],
   main() {
     enablePlexSkipper.watch((newValue: boolean, oldValue: boolean) => {
       if (!newValue) {

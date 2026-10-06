@@ -9,6 +9,7 @@ import {
 } from "@/utils/storage";
 import "./App.css";
 import DelaySlider from "./components/delay-slider";
+import ServerAccess from "./components/server-access";
 import Switch from "./components/switch";
 
 function App() {
@@ -113,6 +114,7 @@ function App() {
           labelId="header-switch"
         />
       </header>
+      <ServerAccess />
       <div id="switch-section">
         <Switch
           id="enableSkipIntro"
